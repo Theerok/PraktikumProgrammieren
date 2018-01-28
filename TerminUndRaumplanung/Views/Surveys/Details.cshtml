@@ -1,0 +1,97 @@
+﻿@model AppData.Models.Survey
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<!-- Erstellt durch Marco Geisthoff -->
+<h2>Details</h2>
+
+<div>
+    <h4>Survey</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Creator)
+        </dt>
+        <dd>
+            @Html.DisplayTextFor(model => model.Creator)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Members)
+        </dt>
+        <dd>
+            @foreach (var item in Model.Members)
+            {
+                <div>
+                    @item.Email
+                </div>
+            }
+        </dd>
+    </dl>
+</div>
+
+<hr />
+
+<div>
+    <h4>Appointments For this Survey</h4>
+
+    <input type="button"
+           class="btn btn-default"
+           value="Add Appointment"
+           onclick="location.href='@Url.Action("Create", "Appointments", new { surveyId = Model.Id})'" />
+
+    <table class="table table-bordered table-hover table-condensed">
+        <thead>
+            <tr>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Room</th>
+                <th>Ressources</th>
+                <th />
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var appointments in @Model.Appointments)
+            {
+
+                <tr>
+                    <td>
+                        @appointments.StartTime
+                    </td>
+                    <td>
+                        @appointments.EndTime
+                    </td>
+                    <td>
+                        @appointments.Room.Name
+                    </td>
+                    <td>
+                        @*Insert some javascript code, that displays only the first x charakters
+                            of all members seperated by a "," and if you click at the field, it
+                            should expand to display all members*@
+                        @foreach (var item in appointments.Ressources)
+                        {
+                            @item.Name
+                        }
+                    </td>
+                    <td>
+                        <a asp-controller="Appointments" asp-action="Edit" asp-route-id="@appointments.Id">Edit</a> |
+                        <a asp-controller="Appointments" asp-action="Delete" asp-route-id="@appointments.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
